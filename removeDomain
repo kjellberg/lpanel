@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [ $# -ne 1 ] ; then
+echo "usage: $0 domain_to_remove";
+exit
+fi
+
+domain=$1
+dom=$(echo $domain | awk -F. '{print$1}')
+
+rm /etc/apache2/sites-enabled/$domain
+
+mv /var/www/domains/$domain /var/lpanel/backups/$domain
+echo "$domain removed...restarting apache"
+apache2ctl graceful
