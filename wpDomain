@@ -1,0 +1,28 @@
+#!/bin/bash
+
+if [ $# -ne 1 ] ; then
+echo "usage: $0 domain_to_add";
+exit
+fi
+
+domain=$1
+dom=$(echo $domain | awk -F. '{print$1}')
+
+echo "
+<VirtualHost *:80>
+ServerAdmin rasmus.kjellberg@seodesign.se
+DocumentRoot /var/www/domains/$domain/public
+ServerName $domain
+ServerAlias $domain *.$domain
+ErrorLog /var/www/domains/$domain/error.log
+CustomLog /var/www/domains/$domain/access.log combined
+</VirtualHost>" > /etc/apache2/sites-enabled/$domain
+
+mkdir /var/www/domains/$domain
+mkdir /var/www/domains/$domain/public
+
+cd /var/www/domains/$domain/public
+git clone https://github.com/WordPress/WordPress.git . 
+
+echo "$domain added...restarting apache"
+apache2ctl graceful

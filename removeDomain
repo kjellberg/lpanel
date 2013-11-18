@@ -10,6 +10,7 @@ dom=$(echo $domain | awk -F. '{print$1}')
 
 rm /etc/apache2/sites-enabled/$domain
 
-mv /var/www/domains/$domain /var/lpanel/backups/$domain
+#mkdir /var/lpanel/backups/
+rm -R /var/www/domains/$domain 
 echo "$domain removed...restarting apache"
 apache2ctl graceful
