@@ -1,2 +1,2 @@
 <?php
-echo "It Work's!";
+echo "<h1>It Works!</h1>";
